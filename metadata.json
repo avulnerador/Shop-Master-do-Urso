@@ -1,0 +1,5 @@
+{
+  "name": "RPG Shop Master",
+  "description": "A universal shop generator and manager for Tabletop RPGs (D&D, Tormenta, etc) with high-end UI, export capabilities, and world-building features.",
+  "requestFramePermissions": []
+}
