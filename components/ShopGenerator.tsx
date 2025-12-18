@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../contexts/StoreContext';
-import { TRANSLATIONS } from '../../constants';
-import { ShopType, SystemTag, Item } from '../../types';
+import { TRANSLATIONS } from '../constants';
+import { ShopType, SystemTag, Item } from '../types';
 import ShopCard from './ShopCard';
 import { Sparkles, Save, Trash2, RefreshCw, Edit, Plus, X, Search, DollarSign, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

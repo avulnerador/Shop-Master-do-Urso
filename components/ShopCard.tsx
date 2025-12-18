@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Shop, ShopAppearance } from '../../types';
+import { Shop, ShopAppearance } from '../types';
 import { useStore } from '../contexts/StoreContext';
-import { TRANSLATIONS } from '../../constants';
+import { TRANSLATIONS } from '../constants';
 import { Download, Coins, MapPin, User, Tag, Palette, X, RotateCcw, Store } from 'lucide-react';
 import { toPng } from 'html-to-image';
 
