@@ -7,7 +7,7 @@ import WorldManager from './components/WorldManager';
 import NPCManager from './components/NPCManager';
 import RulesManager from './components/RulesManager'; // New
 import { TRANSLATIONS } from './constants';
-import { Store, Settings, Archive, Menu, X, Package, Map, Users, ChevronDown, ChevronRight, MapPin, BookOpen } from 'lucide-react';
+import { Store, Settings, Archive, Menu, X, Package, Map, Users, ChevronDown, ChevronRight, MapPin, BookOpen, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MainLayout: React.FC = () => {
@@ -15,6 +15,7 @@ const MainLayout: React.FC = () => {
   const t = TRANSLATIONS[appSettings.language];
   const [activeTab, setActiveTab] = useState<'generator' | 'inventory' | 'world' | 'npcs' | 'settings' | 'rules'>('generator');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   
   // Grouping state
   const [expandedLocations, setExpandedLocations] = useState<Record<string, boolean>>({});
@@ -50,6 +51,51 @@ const MainLayout: React.FC = () => {
   return (
     <div className="flex h-screen bg-dark overflow-hidden font-sans text-gray-200">
       
+      {/* Tutorial Modal */}
+      <AnimatePresence>
+        {showTutorial && (
+            <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                onClick={() => setShowTutorial(false)}
+            >
+                <motion.div 
+                    initial={{ scale: 0.9 }} animate={{ scale: 1 }}
+                    className="relative max-w-3xl w-full bg-surface border border-white/10 rounded-2xl p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button onClick={() => setShowTutorial(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><X size={24}/></button>
+                    <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <HelpCircle className="text-yellow-400" /> {t.tutorialTitle}
+                    </h2>
+                    
+                    <div className="space-y-6 text-gray-300">
+                        <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                            <h3 className="text-lg font-bold text-primary mb-2 flex items-center gap-2"><Store size={18}/> {t.shopGenerator}</h3>
+                            <p>{t.tutorialContent.gen}</p>
+                        </div>
+                        <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                            <h3 className="text-lg font-bold text-primary mb-2 flex items-center gap-2"><Package size={18}/> {t.inventory}</h3>
+                            <p>{t.tutorialContent.inv}</p>
+                        </div>
+                        <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                            <h3 className="text-lg font-bold text-primary mb-2 flex items-center gap-2"><Map size={18}/> {t.worldManager}</h3>
+                            <p>{t.tutorialContent.world}</p>
+                        </div>
+                        <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                             <h3 className="text-lg font-bold text-primary mb-2 flex items-center gap-2"><Users size={18}/> {t.npcManager}</h3>
+                             <p>{t.tutorialContent.npc}</p>
+                        </div>
+                         <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                             <h3 className="text-lg font-bold text-primary mb-2 flex items-center gap-2"><BookOpen size={18}/> {t.rulesManager}</h3>
+                             <p>{t.tutorialContent.rules}</p>
+                        </div>
+                    </div>
+                </motion.div>
+            </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Mobile Menu Button */}
       <button 
         className="lg:hidden absolute top-4 left-4 z-50 p-2 bg-surface rounded-md border border-white/10"
@@ -141,8 +187,15 @@ const MainLayout: React.FC = () => {
           </div>
         </nav>
 
-        <div className="p-4 border-t border-white/5 text-xs text-gray-600 text-center flex-shrink-0">
-          v1.5.0
+        <div className="p-4 border-t border-white/5 flex justify-between items-center">
+          <span className="text-xs text-gray-600">v1.5.0</span>
+          <button 
+            onClick={() => setShowTutorial(true)}
+            className="text-yellow-400 hover:text-yellow-300 transition-colors p-1.5 rounded-full hover:bg-yellow-400/10 shadow-[0_0_10px_rgba(250,204,21,0.2)] hover:shadow-[0_0_15px_rgba(250,204,21,0.5)]"
+            title={t.tutorial}
+          >
+              <HelpCircle size={18} />
+          </button>
         </div>
       </aside>
 

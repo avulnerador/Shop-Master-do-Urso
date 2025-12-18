@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useStore } from '../contexts/StoreContext';
 import { TRANSLATIONS } from '../constants';
-import { ShopType, SystemTag, Item } from '../types';
+import { ShopType, SystemTag, Item, ItemType } from '../types';
 import ShopCard from './ShopCard';
-import { Sparkles, Save, Trash2, RefreshCw, Edit, Plus, X, Search, DollarSign, AlertTriangle } from 'lucide-react';
+import { Sparkles, Save, Trash2, RefreshCw, Edit, Plus, X, Search, DollarSign, Edit2, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ShopGenerator: React.FC = () => {
   const { 
     appSettings, currentShop, cities, allItems, npcs, 
     generateShop, saveShop, deleteShop, updateCurrentShop,
-    availableShopTypes, availableItemTypes, availableSystems 
+    availableShopTypes, availableItemTypes, availableSystems, availableRarities 
   } = useStore();
   const t = TRANSLATIONS[appSettings.language];
 
@@ -25,6 +25,9 @@ const ShopGenerator: React.FC = () => {
   // Edit Mode State
   const [isEditMode, setIsEditMode] = useState(false);
   const [itemSearch, setItemSearch] = useState('');
+  
+  // Full Item Edit Modal State
+  const [editingItem, setEditingItem] = useState<Item | null>(null);
 
   // Image Modal State
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -101,6 +104,14 @@ const ShopGenerator: React.FC = () => {
       }
   };
 
+  const handleSaveFullItemEdit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (editingItem) {
+          handleUpdateItemInShop(editingItem.id, editingItem);
+          setEditingItem(null);
+      }
+  };
+
   const handleCategoryModifierChange = (category: string, value: number) => {
     if (currentShop) {
         const newModifiers = { ...currentShop.settings.categoryModifiers, [category]: value };
@@ -140,6 +151,105 @@ const ShopGenerator: React.FC = () => {
                     <img src={previewImage} alt="NPC" className="w-full h-auto rounded-lg shadow-2xl" />
                 </motion.div>
             </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Item Full Edit Modal */}
+      <AnimatePresence>
+        {editingItem && (
+             <motion.div 
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+             >
+                <div className="bg-surface border border-white/10 rounded-xl p-6 w-full max-w-lg shadow-2xl relative">
+                    <button onClick={() => setEditingItem(null)} className="absolute top-4 right-4 text-gray-500 hover:text-white"><X size={20}/></button>
+                    <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <Edit2 size={18} className="text-primary" /> {t.editItemFull}
+                    </h3>
+                    
+                    <form onSubmit={handleSaveFullItemEdit} className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.name}</label>
+                                <input 
+                                    required
+                                    className="bg-black/20 border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.name} 
+                                    onChange={e => setEditingItem({...editingItem, name: e.target.value})}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.price}</label>
+                                <input 
+                                    type="number" required
+                                    className="bg-black/20 border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.price} 
+                                    onChange={e => setEditingItem({...editingItem, price: parseFloat(e.target.value)})}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                             <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.type}</label>
+                                <select 
+                                    className="bg-[#1e293b] border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.type} 
+                                    onChange={e => setEditingItem({...editingItem, type: e.target.value as ItemType})}
+                                >
+                                    {availableItemTypes.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.system}</label>
+                                <select 
+                                    className="bg-[#1e293b] border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.system} 
+                                    onChange={e => setEditingItem({...editingItem, system: e.target.value as SystemTag})}
+                                >
+                                    {availableSystems.map(s => <option key={s} value={s}>{s}</option>)}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.rarity}</label>
+                                <select 
+                                    className="bg-[#1e293b] border border-white/10 rounded p-2 text-white w-full text-xs focus:outline-none focus:border-primary"
+                                    value={editingItem.rarity} 
+                                    onChange={e => setEditingItem({...editingItem, rarity: e.target.value as any})}
+                                >
+                                    {availableRarities.map(r => <option key={r} value={r}>{r}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.weight}</label>
+                                <input 
+                                    className="bg-black/20 border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.weight || ''} 
+                                    onChange={e => setEditingItem({...editingItem, weight: e.target.value})}
+                                />
+                            </div>
+                             <div>
+                                <label className="block text-xs text-gray-400 mb-1">{t.currency}</label>
+                                <input 
+                                    className="bg-black/20 border border-white/10 rounded p-2 text-white w-full focus:outline-none focus:border-primary"
+                                    value={editingItem.currency} 
+                                    onChange={e => setEditingItem({...editingItem, currency: e.target.value})}
+                                />
+                            </div>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            className="w-full py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-lg shadow-lg hover:opacity-90 transition flex items-center justify-center gap-2"
+                        >
+                            <Check size={18} /> {t.saveChanges}
+                        </button>
+                    </form>
+                </div>
+             </motion.div>
         )}
       </AnimatePresence>
 
@@ -493,6 +603,13 @@ const ShopGenerator: React.FC = () => {
                                         />
                                         <span className="text-xs text-yellow-500 font-mono w-6">{item.currency}</span>
                                      </div>
+                                     <button 
+                                        onClick={() => setEditingItem(item)}
+                                        className="p-1.5 hover:bg-primary/40 rounded text-gray-500 hover:text-white transition"
+                                        title={t.editItemFull}
+                                     >
+                                        <Edit2 size={14} />
+                                     </button>
                                      <button 
                                         onClick={() => handleRemoveItemFromShop(item.id)}
                                         className="p-1.5 hover:bg-red-900/40 rounded text-gray-500 hover:text-red-400 transition"

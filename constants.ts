@@ -1,3 +1,4 @@
+
 import { Item, NPC } from './types';
 
 export const INITIAL_ITEMS: Item[] = [
@@ -120,7 +121,18 @@ export const TRANSLATIONS = {
     importData: "Import File",
     importSuccess: "Data imported successfully!",
     importError: "Error importing data. Check JSON format.",
-    shopColor: "Shop Theme Color"
+    shopColor: "Shop Theme Color",
+    tutorial: "Tutorial",
+    tutorialTitle: "How to use Shop Master",
+    editItemFull: "Edit Item Details",
+    saveChanges: "Save Changes",
+    tutorialContent: {
+        gen: "Generator: Configure filters (Type, System), select an NPC (or random), and generate unique shops.",
+        inv: "Inventory: Manage the global pool of items. Add your own items here to appear in future generations.",
+        world: "World: Manage cities and locations where shops can spawn.",
+        npc: "NPCs: Create custom shopkeepers to give personality to your shops.",
+        rules: "Rules: Customize the drop-down lists (Systems, Rarities, Types) to fit your RPG campaign."
+    }
   },
   pt: {
     shopGenerator: "Gerador de Loja",
@@ -196,7 +208,18 @@ export const TRANSLATIONS = {
     importData: "Importar Arquivo",
     importSuccess: "Dados importados com sucesso!",
     importError: "Erro ao importar. Verifique o JSON.",
-    shopColor: "Cor da Loja"
+    shopColor: "Cor da Loja",
+    tutorial: "Tutorial",
+    tutorialTitle: "Como usar o Shop Master",
+    editItemFull: "Editar Detalhes do Item",
+    saveChanges: "Salvar Alterações",
+    tutorialContent: {
+        gen: "Gerador: Configure os filtros (Tipo de Loja, Sistema), escolha um NPC (ou deixe aleatório) e gere lojas únicas.",
+        inv: "Inventário: Gerencie o banco de dados global de itens. Itens criados aqui aparecerão em gerações futuras.",
+        world: "Mundo: Gerencie as cidades e locais onde as lojas podem aparecer.",
+        npc: "NPCs: Crie vendedores personalizados para dar personalidade às suas lojas.",
+        rules: "Regras: Personalize as listas de opções (Sistemas, Raridades, Tipos) para se adequar à sua campanha de RPG."
+    }
   },
   es: {
     shopGenerator: "Generador de Tiendas",
@@ -272,6 +295,17 @@ export const TRANSLATIONS = {
     importData: "Importar Archivo",
     importSuccess: "¡Datos importados con éxito!",
     importError: "Error al importar. Verifique JSON.",
-    shopColor: "Color de Tienda"
+    shopColor: "Color de Tienda",
+    tutorial: "Tutorial",
+    tutorialTitle: "Cómo usar Shop Master",
+    editItemFull: "Editar Detalles del Artículo",
+    saveChanges: "Guardar Cambios",
+    tutorialContent: {
+        gen: "Generador: Configure filtros (Tipo, Sistema), seleccione un NPC (o aleatorio) y genere tiendas únicas.",
+        inv: "Inventario: Gestione el conjunto global de artículos. Añada sus propios artículos aquí para futuras generaciones.",
+        world: "Mundo: Gestione ciudades y lugares donde pueden aparecer las tiendas.",
+        npc: "NPCs: Cree vendedores personalizados para dar personalidad a sus tiendas.",
+        rules: "Reglas: Personalice las listas desplegables (Sistemas, Rarezas, Tipos) para su campaña."
+    }
   }
 };
